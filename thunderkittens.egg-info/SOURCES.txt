@@ -1,0 +1,11 @@
+LICENSE
+README.md
+setup.py
+thunderkittens.cpp
+kernels/attn/h100/h100.cu
+kernels/fused_layernorm/layer_norm.cu
+kernels/generated_kernel/generated_kernel.cu
+thunderkittens.egg-info/PKG-INFO
+thunderkittens.egg-info/SOURCES.txt
+thunderkittens.egg-info/dependency_links.txt
+thunderkittens.egg-info/top_level.txt
