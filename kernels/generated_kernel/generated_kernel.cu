@@ -146,7 +146,7 @@ void fused_layer_norm(
 #include "common/pyutils/torch_helpers.cuh"
 #include <iostream>
 void 
-fused_layernorm(
+generated_kernel(
     int has_residual, 
     float dropout_p, 
     const torch::Tensor x, 
@@ -221,4 +221,3 @@ fused_layernorm(
 #else
 #include "harness.impl"
 #endif
-

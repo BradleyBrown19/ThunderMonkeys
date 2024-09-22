@@ -221,4 +221,3 @@ fused_layernorm(
 #else
 #include "harness.impl"
 #endif
-

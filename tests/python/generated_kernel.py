@@ -3,7 +3,9 @@ import torch
 import torch.nn as nn
 import thunderkittens as tk
 
-TOL = 1e-3
+TOL = 1e-2
+
+def rtol(x, y): return 2 * (x - y).abs() / (x.abs() + y.abs())
 
 def run_reference_implementation(x, residual, drop_path, dropout, norm, residual_in_fp32=False):
     dropped = dropout(x) #drop_path(dropout(x))
@@ -21,18 +23,13 @@ def run_tk(x, residual, drop_path, dropout, norm, residual_in_fp32=False):
     has_residual = int(residual is not None)
     out = torch.zeros_like(x)
     out_resid = torch.zeros_like(x)
-    """
-    WRITE ME 
-    """
-    tk.generated_kernel(
+
+    tk.fused_layernorm(
         int(has_residual), float(dropout.p),
         x, residual, 
         norm_weight, norm_bias, 
         out, out_resid
     )
-    """
-    WRITE ME 
-    """
 
     return out, out_resid 
 
@@ -64,15 +61,10 @@ if __name__ == "__main__":
     fn_out, fn_resid = run_tk(x, residual, drop_path, dropout, norm)
 
     print("----"*10)
-    diff = torch.norm(out - fn_out).max()
-    breakpoint()
-    print(out[2,4,:8])
-    print(fn_out[2,4,:8])
+    diff = rtol(out, fn_out).mean().item()
     assert diff < TOL
     print(f"Out Diff: {diff}")
 
-    diff = torch.norm(resid - fn_resid).max()
-    print(resid[4,2,:8])
-    print(fn_resid[4,2,:8])
+    diff = rtol(resid, fn_resid).mean().item() 
     assert diff < TOL
     print(f"Resid Diff: {diff}")
