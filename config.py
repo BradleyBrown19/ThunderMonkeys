@@ -14,7 +14,7 @@ sources = {
     },
 }
 
-kernels = ["fused_layernorm"]
+kernels = ["generated_kernel"]
 
 target = 'h100'
 
